@@ -2,6 +2,10 @@ const fs = require("fs")
 const http = require("http")
 const url = require("url")
 
+//Read from the db
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
+const dataObj = JSON.parse(data)
+
 /////////////////////////////////
 //Server
 const server = http.createServer((req, res) => {
@@ -14,15 +18,12 @@ const server = http.createServer((req, res) => {
   res.end(`This is the product`)
  }
  if (path === "/api") {
-  //Read from the db
-  fs.readFile(`${__dirname}/dev-data/data.json`, "utf-8", (err, data) => {
-   //Tell the browser what is coming
-   res.writeHead(200, {
-    "Content-type": "application/json",
-   })
-   //send the data
-   res.end(data)
+  //Tell the browser what is coming
+  res.writeHead(200, {
+   "Content-type": "application/json",
   })
+  //send the data
+  res.end(data)
  } else {
   res.end(`Error`)
  }
