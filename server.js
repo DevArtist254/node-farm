@@ -40,10 +40,10 @@ const replaceTemp = (temp, product) => {
 //Server
 const server = http.createServer((req, res) => {
  //find the current path the user is at and respond
- const path = req.url
+ const {query, pathname} = url.parse(req.url, true)
 
  //Overview page
- if (path === "/" || path === "/overview") {
+ if (pathname === "/" || pathname === "/overview") {
   res.writeHead(200, {
    "Content-type": "text/html",
   })
@@ -56,11 +56,17 @@ const server = http.createServer((req, res) => {
   res.end(output)
 
   //Product page
- } else if (path === "/product") {
-  res.end(`This is the product`)
+ } else if (pathname === "/product") {
+  res.writeHead(200, {
+   "Content-type": "text/html",
+  })
+  const product = dataObj[query.id]
+  const output = replaceTemp(productTemp, product)
+
+  res.end(output)
 
   //Api
- } else if (path === "/api") {
+ } else if (pathname === "/api") {
   //Tell the browser what is coming
   res.writeHead(200, {
    "Content-type": "application/json",
